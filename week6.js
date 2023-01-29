@@ -1,5 +1,6 @@
 class Card {
-   
+    value; 
+
     constructor(value){
     this.value = value;
     }
@@ -10,7 +11,7 @@ class Card {
     }
 }
 
-class Game {
+class game {
     // create 2 players taking in their names
     // divide out the 26 cards in between
     // start the game
@@ -32,37 +33,36 @@ class Game {
         this.player1Name = player1Name;
         this.player2Name = player2Name;
        
-        createGame();
 
     }
 
     createGame() {
-        pick = null
+        let pick = null
 
         while (pick !== "QUIT") {
 
-            pick = prompt("would you like play a game of war with players" + this.player1.getName() + "and" + this.player2.getName() + "? Y for Yes, QUIT for quit.")
+            pick = prompt("would you like play a game of war with players" + this.player1name + "and" + this.player2name + "? Y for Yes, QUIT for quit.")
             
             this.Deck = [];
             this.deck1 = [];
             this.deck2 = [];
 
-            createDeck()
+            this.createDeck();
 
-            splitDeck()
+            this.splitDeck();
 
-            this.player1 = Player(this.player1Name, this.deck1)
-            this.player2 = Player(this.player2Name, this.deck2)
+            this.player1 = new Player(this.player1Name, this.deck1)
+            this.player2 = new Player(this.player2Name, this.deck2)
 
-            playGame();
+            this.playGame();
         }
     }
 
     createDeck() {
 
-        for (i = 0; i < 4; i++); {
-            for (i = 1; i < 14; i++) {
-                this.Deck.push(Card[i])
+        for (let i = 0; i < 4; i++) {
+            for (let i = 1; i < 14; i++) {
+                this.Deck.push(new Card(i))
             }
         }
 
@@ -70,16 +70,16 @@ class Game {
 
     splitDeck() {
 
-        for (i = 0; i < 26; i++) {
-            num = getRandomInt(this.Deck.length)
-            currCar = this.Deck[num]
+        for (let i = 0; i < 26; i++) {
+            let num = getRandomInt(this.Deck.length)
+            let currCard = this.Deck[num]
             this.deck1.push(currCard)
             this.Deck.splice(num, 1)
 
         }
-        for (i = 0; i < 26; i++) {
-            num = getRandomInt(this.Deck.length)
-            currCar = this.Deck[num]
+        for (let i = 0; i < 26; i++) {
+            let num = getRandomInt(this.Deck.length)
+            let currCard = this.Deck[num]
             this.deck2.push(currCard)
             this.Deck.splice(num, 1)
 
@@ -90,27 +90,26 @@ class Game {
     playGame() {
 
         while ( (this.player1.getHandSize() !== 0) && (this.player2.getHandSize() !== 0) ) {
-            player1Card = this.player1.getCard();
-            player2Card = this.player2.getCard();
+            let player1Card = this.player1.getCard();
+            let player2Card = this.player2.getCard();
 
             if (player1Card.getValue() > player2Card.getValue()) {
-                this.player1.addCardToDeck(olayer2Card)
+                this.player1.addCardToDeck(player2Card)
             }
             else if (player1Card.getValue() < player2Card.getValue()) {
-                this.player2.addCardToDeck(olayer1Card)
+                this.player2.addCardToDeck(player1Card)
             }
             else {
-                playWar();
+                this.playWar();
             }
 
         }
 
-        if(this.player1.getHandSize === 0) {
-            print(this.player1.getName() + "has lost the game" + this.player2.getName() + "congrats you've won!")
+        if(this.player1.getHandSize() === 0) {
+            console.log(this.player1.getName() + " has lost the game. " + this.player2.getName() + " congrats you've won!\n Player 1 cards: " + this.player1.getCards() + "\n Player 2 cards: " + this.player2.getCards())
         }
-
         else {
-            print(this.player2.getName() + "has lost the game" + this.player1.getName() + "congrats you've won!")
+            console.log(this.player2.getName() + " has lost the game. " + this.player1.getName() + " congrats you've won!\n Player 1 cards: " + this.player1.getCards() + "\n Player 2 cards: " + this.player2.getCards())
         }
 
 
@@ -118,67 +117,72 @@ class Game {
 
     playWar() {
 
-        war = True;
-        player1Cards = [];
-        player2Cards = [];
+        let war = true;
+        let player1Cards = [];
+        let player2Cards = [];
 
         while (war) {
 
-            for (i = 0; i < 3; i++) {
-                player1Cards.push(player1.getCard());
+            for (let i = 0; i < 3; i++) {
+                player1Cards.push(this.player1.getCard());
             }
-            for (i = 0; i < 3; i++) {
-                player2Cards.push(player2.getCard());
+            for (let i = 0; i < 3; i++) {
+                player2Cards.push(this.player2.getCard());
             }
 
-            player1Card = player1.getCard();
-            player2Card = player2.getCard();
+            let player1Card = this.player1.getCard();
+            let player2Card = this.player2.getCard();
 
-        }
+            if (player1Card === null || player2Card === null) {
+                break;
+            }
+    
 
-        if (player1Card.getValue() > player2Card.getValue()) {
+            if (player1Card.getValue() > player2Card.getValue()) {
+                
+                for (let i = 0; i < player1Cards.length; i++) {
+                    let currCard = player1Cards[i]
+                    this.player1.addCardToDeck(currCard)
+                }
             
-            for (i < 0; i < player1Cards.length; i++) {
-                currCard = player1Cards[i]
-                this.player1.push(currCard)
+
+                for (let i = 0; i < player2Cards.length; i++) {
+                    let currCard = player2Cards[i]
+                    this.player1.addCardToDeck(currCard)  
+                } 
+
+                this.player1.addCardToDeck(player1Card);
+                this.player1.addCardToDeck(player2Card);
+
+                war = false
             }
-        
 
-            for (i < 0; i < player2Cards.length; i++) {
-                currCard = player2Cards[i]
-                this.player2.push(currCard)  
-            } 
-
-            this.player1.addCardToDeck(player1Card);
-            this.player2.addCardToDeck(player2Card);
-
-            war = False
-        }
-
-        else if (player1Card.getValue() < player2Card.getValue()) {
+            else if (player1Card.getValue() < player2Card.getValue()) {
+                
+                for (let i = 0; i < player1Cards.length; i++) {
+                    let currCard = player1Cards[i]
+                    this.player2.addCardToDeck(currCard)
+                }
             
-            for (i < 0; i < player1Cards.length; i++) {
-                currCard = player1Cards[i]
-                this.player2.push(currCard)
+
+                for (let i = 0; i < player2Cards.length; i++) {
+                    let currCard = player2Cards[i]
+                    this.player2.addCardToDeck(currCard)  
+                } 
+
+                this.player2.addCardToDeck(player1Card);
+                this.player2.addCardToDeck(player2Card);
+
+                war = false
             }
-        
+            else {
+                
+                player1Cards.push(player1Card);
+                player2Cards.push(player2Card);
+            }
 
-            for (i < 0; i < player2Cards.length; i++) {
-                currCard = player2Cards[i]
-                this.player2.push(currCard)  
-            } 
 
-            this.player2.addCardToDeck(player1Card);
-            this.player2.addCardToDeck(player2Card);
-
-            war = False
         }
-        else {
-            
-            player1Cards.push(player1Card);
-            player2Cards.push(player2Card);
-        }
-
 
     }
 
@@ -186,26 +190,41 @@ class Game {
 
 class Player {
 
+    name;
+    cards;
+
     constructor(name, cards) {
         this.name = name
         this.cards = cards;
     }
 
-    getName( {
+    getCards() {
+        return this.cards;
+    }
+
+    getName(){
         return this.name;
-    })
+    }
 
     getCard() {
         // Player will enter value
         // Check if cards contain a card with that value
         // If yes, play card
         // If no, tell player "Card is unavailable"
-    
-    cardNum =  getRandomInt(this.cards.length())
 
-    card = this.cards[cardNum]
+        if (this.cards.length === 0){
+            console.log("No cards are left\n")
+            return null;
+        }
+        else {
+        let cardNum =  getRandomInt(this.cards.length)
 
-    this.removeCardFromDeck(cardNum)
+        let card = this.cards[cardNum]
+
+        this.removeCardFromDeck(cardNum)
+
+        return card;
+        }
 
     }
 
@@ -215,7 +234,7 @@ class Player {
     }
 
     addCardToDeck(card) {
-        this.cards.push[card]
+        this.cards.push(card)
     }
 
     getHandSize() {
@@ -223,8 +242,14 @@ class Player {
     }
 }
 
-getRandomInt() {
+function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 
-
 }
+
+name1 = prompt("What is player 1's name?")
+name2 = prompt("What is player 2's name?")
+
+game1 = new game(name1, name2);
+
+game1.createGame(); 
