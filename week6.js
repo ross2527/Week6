@@ -252,4 +252,8 @@ name2 = prompt("What is player 2's name?")
 
 game1 = new game(name1, name2);
 
-game1.createGame(); 
+game1.createGame();
+
+let card = new Card()
+
+module.exports = card;
